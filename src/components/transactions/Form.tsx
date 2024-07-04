@@ -23,10 +23,18 @@ import { ICategory, ITransaction } from "@/interfaces";
 import { Input } from "../ui/input";
 import { CalendarIcon, LoaderIcon } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import Link from "next/link";
 import { Calendar } from "../ui/calendar";
 import { format } from "date-fns";
 import { Delete } from "./DeleteButton";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { cn } from "@/lib/utils";
 
 interface Props {
   categories: ICategory[];
@@ -47,7 +55,6 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
   const router = useRouter();
   const [formModified, setFormModified] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [balance, setBalance] = useState(0);
 
   const getCurrentDateTimeLocal = () => {
     const now = new Date();
@@ -56,7 +63,13 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
     return isoString.substring(0, isoString.length - 1); // Remove the 'Z' at the end
   };
 
-  const { handleSubmit, register, control, watch } = useForm<FormInputs>({
+  const {
+    handleSubmit,
+    register,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<FormInputs>({
     defaultValues: {
       ...transaction,
       date: transaction.date
@@ -98,8 +111,7 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
       if (ok) {
         console.log("READY");
         console.log({ message });
-        // router.replace(`/transactions/${updatedTransaction?.id}`);
-        router.replace(`/transactions`);
+        router.replace(`/transactions/${updatedTransaction?.id}`);
       } else {
         console.log("ERROR");
         console.log({ message });
@@ -115,7 +127,6 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        {/* <CardDescription>{currencyFormat(balance)}</CardDescription> */}
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} onChange={handleInputChange}>
@@ -160,7 +171,14 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="amount">Monto</label>
+              <label
+                htmlFor="amount"
+                className={cn("mt-2", {
+                  "text-[#ca1515]": errors.amount,
+                })}
+              >
+                Monto
+              </label>
               <Input
                 type="number"
                 step={0.01}
@@ -168,7 +186,14 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="description">Descripción</label>
+              <label
+                htmlFor="description"
+                className={cn("mt-2", {
+                  "text-[#ca1515]": errors.description,
+                })}
+              >
+                Descripción
+              </label>
               <Textarea
                 className="uppercase"
                 {...register("description", {
@@ -178,40 +203,74 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="type">Tipo</label>
-              <select
-                {...register("type")}
-                className="outline-none focus:ring-1 p-2 rounded text-sm"
+              <label
+                htmlFor="type"
+                className={cn("mt-2", {
+                  "text-[#ca1515]": errors.type,
+                })}
               >
-                <option value="">Tipo de movimiento</option>
-                <option value="INCOME">INGRESO</option>
-                <option value="EXPENSE">EGRESO</option>
-              </select>
+                Tipo
+              </label>
+              <Controller
+                name="type"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccionar tipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="INCOME">INGRESO</SelectItem>
+                        <SelectItem value="EXPENSE">GASTO</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </div>
           </section>
 
           {selectedType && (
             <div className="flex flex-col mb-2">
-              <label htmlFor="categoryId" className="input-label">
+              <label
+                htmlFor="categoryId"
+                className={cn("mt-2", {
+                  "text-[#ca1515]": errors.categoryId,
+                })}
+              >
                 Categoría
               </label>
-              <select
-                className="outline-none focus:ring-1 p-2 rounded text-sm"
-                {...register("categoryId", { required: true })}
-              >
-                {categories?.map((category: ICategory) => (
-                  <React.Fragment key={category.id}>
-                    {category.type === selectedType && (
-                      <option value={category.id}>{category.name}</option>
-                    )}
-                  </React.Fragment>
-                ))}
-              </select>
+
+              <Controller
+                name="categoryId"
+                control={control}
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccionar tipo" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories?.map((category: ICategory) => (
+                        <SelectGroup key={category.id}>
+                          {category.type === selectedType && (
+                            <SelectItem value={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          )}
+                        </SelectGroup>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </div>
           )}
 
           <div className="flex flex-col">
-            <label htmlFor="notes">Notas</label>
+            <label htmlFor="notes" className="mt-2">
+              Notas
+            </label>
             <Textarea {...register("notes")} />
           </div>
 

@@ -172,7 +172,7 @@ export const CategoryForm = ({ category, title }: Props) => {
                       })}
                     />
                   </div>
-                  <div className="flex flex-col !text-black">
+                  <div className="flex flex-col">
                     <label htmlFor="type">Tipo</label>
                     <Controller
                       name="type"
@@ -183,7 +183,7 @@ export const CategoryForm = ({ category, title }: Props) => {
                           onValueChange={field.onChange}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Seleccionar rol" />
+                            <SelectValue placeholder="Seleccionar tipo" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
