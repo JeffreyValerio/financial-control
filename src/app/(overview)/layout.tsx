@@ -1,6 +1,4 @@
-import { Balance, SidebarAdmin } from "@/components";
-import { ThemeProvider } from "@/components/shared/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
+import { Providers, SidebarAdmin } from "@/components";
 
 export default function OverviewLayout({
   children,
@@ -12,18 +10,9 @@ export default function OverviewLayout({
       <SidebarAdmin />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <main className="flex w-full justify-center min-h-[calc(100vh-7rem)] p-8">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-          <Balance />
+          <Providers>{children}</Providers>
         </main>
       </div>
-      <Toaster />
     </div>
   );
 }

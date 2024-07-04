@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Coins, Tags, Wallet } from "lucide-react";
 import {
-  Tooltip,  
+  Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
