@@ -22,7 +22,6 @@ import { LoaderIcon } from "lucide-react";
 import { TableSkeleton } from "./TableSkeleton";
 import { Textarea } from "../ui/textarea";
 import { TransactionList } from "./Transactions";
-import Link from "next/link";
 import {
   Select,
   SelectContent,
@@ -103,8 +102,8 @@ export const CategoryForm = ({ category, title }: Props) => {
       if (ok) {
         console.log("READY");
         console.log({ message });
-        // router.replace(`/categories/${updatedCategory?.id}`);
-        router.replace(`/categories`);
+        router.replace(`/categories/${updatedCategory?.id}`);
+        // router.replace(`/categories`);
       } else {
         console.log("ERROR");
         console.log({ message });
@@ -226,7 +225,7 @@ export const CategoryForm = ({ category, title }: Props) => {
         )}
       </CardContent>
       <CardFooter>
-        <Link href={"/categories"}>Regresar</Link>
+        <Button onClick={() => router.back()}>Regresar</Button>
       </CardFooter>
     </Card>
   );

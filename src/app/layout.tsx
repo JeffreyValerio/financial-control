@@ -9,9 +9,7 @@ const fontSans = FontSans({
 });
 
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { Balance, SidebarAdmin } from "@/components";
-import { ThemeProvider } from "@/components/shared/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,32 +22,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
-        )}
-      >
-        <div className="flex min-h-screen w-full flex-col bg-muted/40">
-          <SidebarAdmin />
-          <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-            <main className="flex w-full justify-center min-h-[calc(100vh-7rem)] p-8">
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                {children}
-              </ThemeProvider>
-              <Balance />
-            </main>
-          </div>
-        </div>
-
-        <Toaster />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable
+          )}
+        >
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

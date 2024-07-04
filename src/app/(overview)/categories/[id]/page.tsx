@@ -2,6 +2,11 @@ import { GetCategoryById } from "@/actions";
 import { CategoryForm } from "@/components";
 import { redirect } from "next/navigation";
 
+
+export const metadata = {
+ title: 'Editar categoría',
+ description: 'Editar categoría',
+}; 
 interface Props {
   params: {
     id: string;

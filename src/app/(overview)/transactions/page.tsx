@@ -75,7 +75,9 @@ export default async function TransactionsPage() {
                       transaction.type === "EXPENSE" ? "destructive" : "success"
                     }
                   >
-                    {transaction.category.name}
+                    <Link href={`categories/${transaction.category.id}`}>
+                      {transaction.category.name}
+                    </Link>
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right flex justify-end">

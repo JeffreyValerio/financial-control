@@ -1,14 +1,14 @@
 import Link from "next/link";
 
-import { Coins, Settings, Tags, Wallet } from "lucide-react";
+import { Coins, Tags, Wallet } from "lucide-react";
 import {
-  Tooltip,
+  Tooltip,  
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import React from "react";
 import { ModeToggle } from "./ModeToggle";
+import { SignedIn, UserButton, SignInButton, SignedOut } from "@clerk/nextjs";
 
 interface iMenu {
   label: string;
@@ -60,7 +60,13 @@ export const SidebarAdmin = () => {
         </TooltipProvider>
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
-        <TooltipProvider>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        {/* <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
@@ -71,9 +77,9 @@ export const SidebarAdmin = () => {
                 <span className="sr-only">Settings</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Settings</TooltipContent>
+            <TooltipContent side="right"></TooltipContent>
           </Tooltip>
-        </TooltipProvider>
+        </TooltipProvider> */}
       </nav>
     </aside>
   );

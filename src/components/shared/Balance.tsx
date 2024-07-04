@@ -3,10 +3,15 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Coins, Tags, Wallet } from "lucide-react";
 import { currencyFormat } from "@/lib/currency-format";
+import { currentUser } from "@clerk/nextjs/server";
 import { GetBalance } from "@/actions";
 
 export const Balance = async () => {
   const { balance } = await GetBalance();
+  const user = await currentUser();
+
+  if (!user) return <></>;
+
   return (
     <div className="fixed md:absolute bottom-0 md:bottom-2 right-2 text-accent flex gap-x-1">
       <div className="bg-primary py-2 px-4 rounded-md flex flex-col justify-center">

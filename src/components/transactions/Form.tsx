@@ -227,7 +227,7 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
         </form>
       </CardContent>
       <CardFooter className="flex justify-between items-center">
-        <Link href={"/transactions"}>Regresar</Link>
+        <Button onClick={() => router.back()}>Regresar</Button>
         {transaction.id && <Delete id={transaction.id} />}
       </CardFooter>
     </Card>
