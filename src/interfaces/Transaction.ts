@@ -1,3 +1,4 @@
+import { ICategory } from "./Category";
 import { Type } from "./Type";
 
 export interface ITransaction {
@@ -8,4 +9,5 @@ export interface ITransaction {
   type: any;
   notes: string;
   categoryId: string;
+  category: ICategory;
 }

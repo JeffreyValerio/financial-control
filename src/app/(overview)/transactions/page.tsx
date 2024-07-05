@@ -1,5 +1,4 @@
 import Link from "next/link";
-
 import {
   Table,
   TableBody,
@@ -19,16 +18,43 @@ import {
 } from "@/components/ui/card";
 import { currencyFormat } from "@/lib/currency-format";
 import { Edit, PlusCircle } from "lucide-react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { GetTransactions } from "@/actions";
+import React from "react";
+import { ITransaction } from "@/interfaces";
 
 export const metadata = {
   title: "Movimientos",
   description: "Movimientos",
 };
 
+interface IGroupedTransactions {
+  [key: string]: ITransaction[];
+}
+
+const groupTransactionsByMonth = (
+  transactions: ITransaction[]
+): IGroupedTransactions => {
+  return transactions.reduce((acc, transaction) => {
+    const date =
+      typeof transaction.date === "string"
+        ? parseISO(transaction.date)
+        : transaction.date;
+    const monthYear = format(date, "MMMM yyyy");
+
+    if (!acc[monthYear]) {
+      acc[monthYear] = [];
+    }
+
+    acc[monthYear].push(transaction);
+    return acc;
+  }, {} as IGroupedTransactions);
+};
+
 export default async function TransactionsPage() {
   const { transactions } = await GetTransactions();
+  const groupedTransactions = groupTransactionsByMonth(transactions);
+
   return (
     <Card className="h-fit w-full">
       <CardHeader className="grid grid-cols-2 items-center">
@@ -48,48 +74,59 @@ export default async function TransactionsPage() {
       <CardContent>
         <Table>
           <TableCaption>Listado de movimientos</TableCaption>
-          <TableHeader>
-            <TableRow className="text-xs">
-              <TableHead className="sr-only">Date</TableHead>
-              <TableHead>Descripción</TableHead>
-              <TableHead>Monto</TableHead>
-              <TableHead>Notas</TableHead>
-              <TableHead>Categoría</TableHead>
-              <TableHead className="sr-only">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {transactions.map((transaction) => (
-              <TableRow key={transaction.id} className="w-full">
-                <TableCell>
-                  {format(new Date(transaction.date), "dd/MM/yyyy")}
-                </TableCell>
-                <TableCell className="font-medium uppercase">
-                  {transaction.description}
-                </TableCell>
-                <TableCell>{currencyFormat(transaction.amount)}</TableCell>
-                <TableCell className="font-medium">
-                  {transaction.notes}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={
-                      transaction.type === "EXPENSE" ? "destructive" : "success"
-                    }
-                  >
-                    <Link href={`categories/${transaction.category.id}`}>
-                      {transaction.category.name}
-                    </Link>
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right flex justify-end">
-                  <Link href={`/transactions/${transaction.id}`}>
-                    <Edit size={18} strokeWidth={1} />
-                  </Link>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+          {Object.keys(groupedTransactions).map((monthYear) => (
+            <React.Fragment key={monthYear}>
+              <TableHeader>
+                <TableRow>
+                  <TableHead colSpan={6} className="text-lg font-bold">
+                    {monthYear}
+                  </TableHead>
+                </TableRow>
+                <TableRow className="text-xs">
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Descripción</TableHead>
+                  <TableHead>Monto</TableHead>
+                  <TableHead>Notas</TableHead>
+                  <TableHead>Categoría</TableHead>
+                  <TableHead className="sr-only">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {groupedTransactions[monthYear].map((transaction) => (
+                  <TableRow key={transaction.id} className="w-full">
+                    <TableCell>
+                      {format(new Date(transaction.date), "dd/MM/yyyy")}
+                    </TableCell>
+                    <TableCell className="font-medium uppercase">
+                      {transaction.description}
+                    </TableCell>
+                    <TableCell>{currencyFormat(transaction.amount)}</TableCell>
+                    <TableCell className="font-medium">
+                      {transaction.notes}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          transaction.type === "EXPENSE"
+                            ? "destructive"
+                            : "success"
+                        }
+                      >
+                        <Link href={`categories/${transaction?.category.id}`}>
+                          {transaction.category.name}
+                        </Link>
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right flex justify-end">
+                      <Link href={`/transactions/${transaction.id}`}>
+                        <Edit size={18} strokeWidth={1} />
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </React.Fragment>
+          ))}
         </Table>
       </CardContent>
     </Card>

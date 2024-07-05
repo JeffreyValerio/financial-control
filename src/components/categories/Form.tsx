@@ -131,7 +131,7 @@ export const CategoryForm = ({ category, title }: Props) => {
   };
 
   return (
-    <Card className="w-full">
+    <Card>
       <CardHeader>
         <CardTitle>{category.name ?? ""}</CardTitle>
         {category.Transaction && (
@@ -145,8 +145,8 @@ export const CategoryForm = ({ category, title }: Props) => {
           </CardDescription>
         )}
       </CardHeader>
-      <CardContent className="grid sm:grid-cols-3 gap-4 justify-between relative">
-        <div className="sm:col-start-1 sm:col-end-2">
+      <CardContent className="grid sm:grid-cols-3 gap-4 justify-between relative ">
+        <div className="sm:col-start-1 sm:col-end-2 ">
           <div className="sticky top-10">
             <form
               onSubmit={handleSubmit(onSubmit)}

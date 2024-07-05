@@ -82,7 +82,6 @@
   fieldset {
     @apply border p-4 rounded;
   }
-
   legend {
     @apply text-lg font-bold px-2;
   }
