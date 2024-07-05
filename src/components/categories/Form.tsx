@@ -30,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useToast } from "../ui/use-toast";
 
 interface Props {
   category: Partial<ICategory>;
@@ -48,6 +49,8 @@ export const CategoryForm = ({ category, title }: Props) => {
   const [formModified, setFormModified] = useState(false);
   const [loading, setLoading] = useState(false);
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
+
+  const { toast } = useToast();
 
   const { handleSubmit, register, control } = useForm<FormInputs>({
     defaultValues: {
@@ -100,13 +103,18 @@ export const CategoryForm = ({ category, title }: Props) => {
       } = await CreateUpdateCategory(formData);
 
       if (ok) {
-        console.log("READY");
-        console.log({ message });
+        toast({
+          title: "¡Éxitoso!",
+          description: message,
+          variant: "success",
+        });
         router.replace(`/categories/${updatedCategory?.id}`);
-        // router.replace(`/categories`);
       } else {
-        console.log("ERROR");
-        console.log({ message });
+        toast({
+          title: "¡Error!",
+          description: message,
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.log(error);

@@ -9,7 +9,11 @@ export const GetCategoryById = async ({ id }: Props) => {
     const category = await prisma.category.findFirst({
       where: { id },
       include: {
-        Transaction: true,
+        Transaction: {
+          orderBy: {
+            date: "desc",
+          },
+        },
       },
     });
 

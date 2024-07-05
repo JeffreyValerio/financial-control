@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { cn } from "@/lib/utils";
+import { useToast } from "../ui/use-toast";
 
 interface Props {
   categories: ICategory[];
@@ -62,6 +63,8 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
     const isoString = now.toISOString();
     return isoString.substring(0, isoString.length - 1); // Remove the 'Z' at the end
   };
+
+  const { toast } = useToast();
 
   const {
     handleSubmit,
@@ -109,12 +112,18 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
       } = await CreateUpdateTransaction(formData);
 
       if (ok) {
-        console.log("READY");
-        console.log({ message });
+        toast({
+          title: "¡Éxitoso!",
+          description: message,
+          variant: "success",
+        });
         router.replace(`/transactions/${updatedTransaction?.id}`);
       } else {
-        console.log("ERROR");
-        console.log({ message });
+        toast({
+          title: "¡Error!",
+          description: message,
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.log(error);

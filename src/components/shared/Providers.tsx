@@ -1,4 +1,3 @@
-import { Toaster } from "../ui/toaster";
 import { Balance } from "./Balance";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
@@ -6,7 +5,6 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
     <div className="">
       {children}
       <Balance />
-      <Toaster />
     </div>
   );
 };
