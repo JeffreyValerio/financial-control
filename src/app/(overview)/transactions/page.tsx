@@ -17,9 +17,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import { currencyFormat } from "@/lib/currency-format";
-import { Edit } from "lucide-react";
+import { Edit, PlusCircle } from "lucide-react";
 import { format } from "date-fns";
 import { GetTransactions } from "@/actions";
 
@@ -38,8 +37,11 @@ export default async function TransactionsPage() {
           <CardDescription>Listado de movimientos</CardDescription>
         </div>
         <div className="flex justify-end">
-          <Link href={"/transactions/new"} className="font-bold">
-            Nueva
+          <Link
+            href={"/transactions/new"}
+            className="font-medium text-sm rounded-md bg-primary text-primary-foreground shadow hover:bg-primary/90 px-4 py-2"
+          >
+            <PlusCircle size={18} />
           </Link>
         </div>
       </CardHeader>

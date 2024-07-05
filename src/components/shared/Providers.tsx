@@ -3,7 +3,7 @@ import { Balance } from "./Balance";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="w-full">
+    <div className="">
       {children}
       <Balance />
       <Toaster />

@@ -1,10 +1,9 @@
-import Link from "next/link";
-
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { cn } from "@/lib/utils";
-import { Coins, Tags, Wallet } from "lucide-react";
 import { currencyFormat } from "@/lib/currency-format";
 import { currentUser } from "@clerk/nextjs/server";
 import { GetBalance } from "@/actions";
+import { Wallet } from "lucide-react";
 
 export const Balance = async () => {
   const { balance } = await GetBalance();
@@ -13,12 +12,14 @@ export const Balance = async () => {
   if (!user) return <></>;
 
   return (
-    <div className="fixed md:absolute bottom-0 md:bottom-2 right-2 text-accent flex gap-x-1">
-      <div className="bg-primary py-2 px-4 rounded-md flex flex-col justify-center">
-        <span className="font-bold flex items-center gap-x-1">
+    <Card className="absolute bottom-0 right-0">
+      <CardHeader className="pb-0">
+        <CardTitle className="font-bold flex items-center gap-x-2">
           <Wallet size={22} />
           Saldo disponible
-        </span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="mt-0">
         <span
           className={cn("font-bold text-3xl", {
             "text-green-600": Number(balance) >= 0,
@@ -27,20 +28,7 @@ export const Balance = async () => {
         >
           {currencyFormat(Number(balance))}
         </span>
-      </div>
-
-      <div className="flex flex-col gap-y-1 items-center justify-center">
-        <div className="rounded-md bg-primary hover:bg-green-600 p-2 text-accent">
-          <Link href={"/categories"}>
-            <Tags className="flex-shrink-0" />
-          </Link>
-        </div>
-        <div className="rounded-md bg-primary hover:bg-green-600 p-2 text-accent">
-          <Link href={"/transactions"}>
-            <Coins className="flex-shrink-0" />
-          </Link>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
