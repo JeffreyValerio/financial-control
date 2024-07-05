@@ -54,12 +54,12 @@ export const CreateUpdateTransaction = async (formData: FormData) => {
           where: { id },
           data: { ...rest },
         });
-        message = `La categoría ${transaction.description} fue actualizada con éxito.`;
+        message = `El movimiento ${transaction.description} fue actualizado con éxito.`;
       } else {
         transaction = await prisma.transaction.create({
           data: { ...rest },
         });
-        message = `La categoría ${transaction.description} fue creada con éxito.`;
+        message = `El movimiento ${transaction.description} fue creado con éxito.`;
       }
 
       let balance = await calculateBalance();
@@ -97,7 +97,7 @@ export const CreateUpdateTransaction = async (formData: FormData) => {
   } catch (error) {
     return {
       ok: false,
-      message: `No se pudo crear/actualizar la categoría.`,
+      message: `No se pudo crear/actualizar el movimiento.`,
     };
   }
 };
