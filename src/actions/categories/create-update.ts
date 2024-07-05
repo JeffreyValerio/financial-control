@@ -36,12 +36,12 @@ export const CreateUpdateCategory = async (formData: FormData) => {
           where: { id },
           data: { ...rest },
         });
-        message = `La categoría ${category.name} fue actualizada con éxito.`;
+        message = `El movimiento ${category.name} fue actualizado con éxito.`;
       } else {
         category = await prisma.category.create({
           data: { ...rest },
         });
-        message = `La categoría ${category.name} fue creada con éxito.`;
+        message = `El movimiento ${category.name} fue creado con éxito.`;
       }
 
       return { category, message };
@@ -58,7 +58,7 @@ export const CreateUpdateCategory = async (formData: FormData) => {
   } catch (error) {
     return {
       ok: false,
-      message: `No se pudo crear/actualizar la categoría.`,
+      message: `No se pudo crear/actualizar el movimiento.`,
     };
   }
 };
