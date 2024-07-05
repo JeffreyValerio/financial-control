@@ -95,7 +95,7 @@ export default async function TransactionsPage() {
                 {groupedTransactions[monthYear].map((transaction) => (
                   <TableRow key={transaction.id} className="w-full">
                     <TableCell>
-                      {format(new Date(transaction.date), "dd/MM/yyyy")}
+                      {format(transaction.date, "dd/MM/yyyy")}
                     </TableCell>
                     <TableCell className="font-medium uppercase">
                       {transaction.description}
