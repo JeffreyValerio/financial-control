@@ -19,6 +19,7 @@ import {
 import { currencyFormat } from "@/lib/currency-format";
 import { Edit, PlusCircle } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { es } from "date-fns/locale";
 import { GetTransactions } from "@/actions";
 import React from "react";
 import { ITransaction } from "@/interfaces";
@@ -95,7 +96,9 @@ export default async function TransactionsPage() {
                 {groupedTransactions[monthYear].map((transaction) => (
                   <TableRow key={transaction.id} className="w-full">
                     <TableCell>
-                      {format(transaction.date, "dd/MM/yyyy")}
+                      {format(new Date(transaction.date), "dd/MM/yyyy", {
+                        locale: es,
+                      })}
                     </TableCell>
                     <TableCell className="font-medium uppercase">
                       {transaction.description}
