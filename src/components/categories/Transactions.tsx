@@ -22,17 +22,24 @@ interface IGroupedTransactions {
   [key: string]: ITransaction[];
 }
 
-const groupTransactionsByMonth = (transactions: ITransaction[]): IGroupedTransactions => {
+const groupTransactionsByMonth = (
+  transactions: ITransaction[]
+): IGroupedTransactions => {
   return transactions.reduce((acc, transaction) => {
     // Asegurarse de que transaction.date es un objeto Date
-    const date = typeof transaction.date === 'string' ? parseISO(transaction.date) : transaction.date;
-    
+    const date =
+      typeof transaction.date === "string"
+        ? parseISO(transaction.date)
+        : transaction.date;
+
     // Verificar si la fecha es válida
     if (!isValid(date)) {
-      console.error(`Fecha inválida para la transacción con ID ${transaction.id}: ${transaction.date}`);
+      console.error(
+        `Fecha inválida para la transacción con ID ${transaction.id}: ${transaction.date}`
+      );
       return acc;
     }
-    
+
     const monthYear = format(date, "MMMM yyyy");
 
     if (!acc[monthYear]) {
@@ -70,9 +77,7 @@ export const TransactionList = ({ transactions }: Props) => {
           <TableBody>
             {groupedTransactions[monthYear].map((transaction) => (
               <TableRow key={transaction.id} className="w-full">
-                <TableCell>
-                  {format(new Date(transaction.date), "dd/MM/yyyy")}{" "}
-                </TableCell>
+                <TableCell>{format(transaction.date, "dd/MM/yyyy")} </TableCell>
                 <TableCell className="font-medium">
                   {transaction.description}
                 </TableCell>
@@ -80,7 +85,9 @@ export const TransactionList = ({ transactions }: Props) => {
                 <TableCell className="font-medium">
                   {transaction.type === "INCOME" ? "Ingreso" : "Gasto"}
                 </TableCell>
-                <TableCell className="font-medium">{transaction.notes}</TableCell>
+                <TableCell className="font-medium">
+                  {transaction.notes}
+                </TableCell>
                 <TableCell className="text-right flex justify-end">
                   <Link href={`/transactions/${transaction.id}`}>
                     <Edit size={18} strokeWidth={1} />
