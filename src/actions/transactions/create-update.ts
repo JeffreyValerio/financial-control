@@ -49,8 +49,6 @@ export const CreateUpdateTransaction = async (formData: FormData) => {
     "America/Costa_Rica"
   );
 
-  console.log({ dateInUTC });
-
   try {
     const prismaTx = await prisma.$transaction(async (tx) => {
       let transaction: Transaction;
