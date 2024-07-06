@@ -12,7 +12,7 @@ export const Balance = async () => {
   if (!user) return <></>;
 
   return (
-    <Card className="absolute bottom-0 right-0">
+    <Card className="fixed bottom-2 right-2">
       <CardHeader className="pb-0">
         <CardTitle className="font-bold flex items-center gap-x-2">
           <Wallet size={22} />
