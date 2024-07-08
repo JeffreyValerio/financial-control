@@ -75,8 +75,8 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
   } = useForm<FormInputs>({
     defaultValues: {
       ...transaction,
-      date: transaction.date
-        ? new Date(transaction.date).toISOString()
+      date: transaction.createdAt
+        ? new Date(transaction.createdAt).toISOString()
         : getCurrentDateTimeLocal(),
     },
   });
@@ -169,7 +169,9 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
                           field.value ? new Date(field.value) : undefined
                         }
                         onSelect={(date) => {
-                          field.onChange(date ? date.toISOString() : "");
+                          field.onChange(
+                            date ? date.toLocaleDateString("es-CR") : ""
+                          );
                           setFormModified(true);
                         }}
                         initialFocus

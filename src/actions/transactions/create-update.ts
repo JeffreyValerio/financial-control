@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { Balance, Transaction } from "@prisma/client";
-import { fromZonedTime } from "date-fns-tz";
 
 const schema = z.object({
   id: z.string().uuid().optional().nullable(),
@@ -42,9 +41,7 @@ export const CreateUpdateTransaction = async (formData: FormData) => {
   }
 
   const transaction = parsed.data;
-  const { id, date, ...rest } = transaction;
-
-  const dateInUTC = fromZonedTime(date, "America/Costa_Rica");
+  const { id, ...rest } = transaction;
 
   try {
     const prismaTx = await prisma.$transaction(async (tx) => {
@@ -55,12 +52,12 @@ export const CreateUpdateTransaction = async (formData: FormData) => {
       if (id) {
         transaction = await prisma.transaction.update({
           where: { id },
-          data: { ...rest, date: dateInUTC },
+          data: { ...rest },
         });
         message = `El movimiento ${transaction.description} fue actualizado con éxito.`;
       } else {
         transaction = await prisma.transaction.create({
-          data: { ...rest, date: dateInUTC },
+          data: { ...rest },
         });
         message = `El movimiento ${transaction.description} fue creado con éxito.`;
       }

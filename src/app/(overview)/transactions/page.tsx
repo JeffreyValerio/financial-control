@@ -39,10 +39,10 @@ const groupTransactionsByMonth = (
   transactions: ITransaction[]
 ): IGroupedTransactions => {
   return transactions.reduce((acc, transaction) => {
-    const date =
+    const date: any =
       typeof transaction.date === "string"
         ? parseISO(transaction.date)
-        : transaction.date;
+        : transaction.date; 
     const monthYear = format(date, "MMMM yyyy");
 
     if (!acc[monthYear]) {
@@ -78,10 +78,7 @@ export default async function TransactionsPage() {
         <Table>
           <TableCaption>Listado de movimientos</TableCaption>
           {Object.keys(groupedTransactions).map((monthYear) => (
-            <ScrollArea
-              className="h-[500px] w-full rounded-md"
-              key={monthYear}
-            >
+            <ScrollArea className="h-[500px] w-full rounded-md" key={monthYear}>
               <TableHeader>
                 <TableRow>
                   <TableHead colSpan={6} className="text-lg font-bold">
@@ -98,40 +95,42 @@ export default async function TransactionsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {groupedTransactions[monthYear].map((transaction) => (
-                  <TableRow key={transaction.id} className="w-full">
-                    <TableCell>
-                      {format(transaction.date, "dd/MM/yyyy HH:MM:ss", {
-                        locale: es,
-                      })}
-                    </TableCell>
-                    <TableCell className="font-medium uppercase">
-                      {transaction.description}
-                    </TableCell>
-                    <TableCell>{currencyFormat(transaction.amount)}</TableCell>
-                    <TableCell className="font-medium">
-                      {transaction.notes}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          transaction.type === "EXPENSE"
-                            ? "destructive"
-                            : "success"
-                        }
-                      >
-                        <Link href={`categories/${transaction?.category.id}`}>
-                          {transaction.category.name}
+                {groupedTransactions[monthYear].map(
+                  (transaction: ITransaction) => (
+                    <TableRow key={transaction.id} className="w-full">
+                      <TableCell>
+                        {transaction.date?.toLocaleDateString("es-CR")}
+                      </TableCell>
+                      <TableCell className="font-medium uppercase">
+                        {transaction.description}
+                      </TableCell>
+                      <TableCell>
+                        {currencyFormat(transaction.amount)}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {transaction.notes}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            transaction.type === "EXPENSE"
+                              ? "destructive"
+                              : "success"
+                          }
+                        >
+                          <Link href={`categories/${transaction?.category.id}`}>
+                            {transaction.category.name}
+                          </Link>
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right flex justify-end">
+                        <Link href={`/transactions/${transaction.id}`}>
+                          <Edit size={18} strokeWidth={1} />
                         </Link>
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right flex justify-end">
-                      <Link href={`/transactions/${transaction.id}`}>
-                        <Edit size={18} strokeWidth={1} />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
               </TableBody>
             </ScrollArea>
           ))}

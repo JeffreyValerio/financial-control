@@ -22,7 +22,7 @@ interface IGroupedTransactions {
   [key: string]: ITransaction[];
 }
 
-const groupTransactionsByMonth = (
+const groupTransactionsByMonth = ( 
   transactions: ITransaction[]
 ): IGroupedTransactions => {
   return transactions.reduce((acc, transaction) => {
