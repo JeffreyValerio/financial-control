@@ -18,7 +18,7 @@ export const CategoryTable = ({ category }: Props) => {
   };
 
   return (
-    <TableRow className="w-full">
+    <TableRow>
       <TableCell className="font-medium">{category.name}</TableCell>
       <TableCell>{category.description}</TableCell>
       <TableCell>{currencyFormat(category.budget)}</TableCell>

@@ -44,10 +44,7 @@ export const CreateUpdateTransaction = async (formData: FormData) => {
   const transaction = parsed.data;
   const { id, date, ...rest } = transaction;
 
-  const dateInUTC = fromZonedTime(
-    new Date(date).toISOString(),
-    "America/Costa_Rica"
-  );
+  const dateInUTC = fromZonedTime(date, "America/Costa_Rica");
 
   try {
     const prismaTx = await prisma.$transaction(async (tx) => {

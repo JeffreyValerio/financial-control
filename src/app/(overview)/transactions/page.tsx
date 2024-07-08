@@ -20,6 +20,7 @@ import {
 import { currencyFormat } from "@/lib/currency-format";
 import { Edit, PlusCircle } from "lucide-react";
 import { format, parseISO } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { es } from "date-fns/locale";
 import { GetTransactions } from "@/actions";
 import React from "react";
@@ -58,85 +59,84 @@ export default async function TransactionsPage() {
   const groupedTransactions = groupTransactionsByMonth(transactions);
 
   return (
-    <ScrollArea className="h-[800px] w-full rounded-md border p-4">
-      <Card>
-        <CardHeader className="grid grid-cols-2 items-center">
-          <div>
-            <CardTitle>Movimientos</CardTitle>
-            <CardDescription>Listado de movimientos</CardDescription>
-          </div>
-          <div className="flex justify-end">
-            <Link
-              href={"/transactions/new"}
-              className="font-medium text-sm rounded-md bg-primary text-primary-foreground shadow hover:bg-primary/90 px-4 py-2"
+    <Card>
+      <CardHeader className="grid grid-cols-2 items-center">
+        <div>
+          <CardTitle>Movimientos</CardTitle>
+          <CardDescription>Listado de movimientos</CardDescription>
+        </div>
+        <div className="flex justify-end">
+          <Link
+            href={"/transactions/new"}
+            className="font-medium text-sm rounded-md bg-primary text-primary-foreground shadow hover:bg-primary/90 px-4 py-2"
+          >
+            <PlusCircle size={18} />
+          </Link>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableCaption>Listado de movimientos</TableCaption>
+          {Object.keys(groupedTransactions).map((monthYear) => (
+            <ScrollArea
+              className="h-[500px] w-full rounded-md"
+              key={monthYear}
             >
-              <PlusCircle size={18} />
-            </Link>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableCaption>Listado de movimientos</TableCaption>
-            {Object.keys(groupedTransactions).map((monthYear) => (
-              <React.Fragment key={monthYear}>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead colSpan={6} className="text-lg font-bold">
-                      {monthYear}
-                    </TableHead>
-                  </TableRow>
-                  <TableRow className="text-xs">
-                    <TableHead>Fecha</TableHead>
-                    <TableHead>Descripción</TableHead>
-                    <TableHead>Monto</TableHead>
-                    <TableHead>Notas</TableHead>
-                    <TableHead>Categoría</TableHead>
-                    <TableHead className="sr-only">Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {groupedTransactions[monthYear].map((transaction) => (
-                    <TableRow key={transaction.id} className="w-full">
-                      <TableCell>
-                        {format(new Date(transaction.date), "dd/MM/yyyy", {
-                          locale: es,
-                        })}
-                      </TableCell>
-                      <TableCell className="font-medium uppercase">
-                        {transaction.description}
-                      </TableCell>
-                      <TableCell>
-                        {currencyFormat(transaction.amount)}
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {transaction.notes}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            transaction.type === "EXPENSE"
-                              ? "destructive"
-                              : "success"
-                          }
-                        >
-                          <Link href={`categories/${transaction?.category.id}`}>
-                            {transaction.category.name}
-                          </Link>
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right flex justify-end">
-                        <Link href={`/transactions/${transaction.id}`}>
-                          <Edit size={18} strokeWidth={1} />
+              <TableHeader>
+                <TableRow>
+                  <TableHead colSpan={6} className="text-lg font-bold">
+                    {monthYear}
+                  </TableHead>
+                </TableRow>
+                <TableRow className="text-xs">
+                  <TableHead>Fecha</TableHead>
+                  <TableHead>Descripción</TableHead>
+                  <TableHead>Monto</TableHead>
+                  <TableHead>Notas</TableHead>
+                  <TableHead>Categoría</TableHead>
+                  <TableHead className="sr-only">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {groupedTransactions[monthYear].map((transaction) => (
+                  <TableRow key={transaction.id} className="w-full">
+                    <TableCell>
+                      {format(transaction.date, "dd/MM/yyyy HH:MM:ss", {
+                        locale: es,
+                      })}
+                    </TableCell>
+                    <TableCell className="font-medium uppercase">
+                      {transaction.description}
+                    </TableCell>
+                    <TableCell>{currencyFormat(transaction.amount)}</TableCell>
+                    <TableCell className="font-medium">
+                      {transaction.notes}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          transaction.type === "EXPENSE"
+                            ? "destructive"
+                            : "success"
+                        }
+                      >
+                        <Link href={`categories/${transaction?.category.id}`}>
+                          {transaction.category.name}
                         </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </React.Fragment>
-            ))}
-          </Table>
-        </CardContent>
-      </Card>
-    </ScrollArea>
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right flex justify-end">
+                      <Link href={`/transactions/${transaction.id}`}>
+                        <Edit size={18} strokeWidth={1} />
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </ScrollArea>
+          ))}
+        </Table>
+      </CardContent>
+    </Card>
   );
 }
