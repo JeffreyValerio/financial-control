@@ -169,9 +169,7 @@ export const TransactionForm = ({ categories, transaction, title }: Props) => {
                           field.value ? new Date(field.value) : undefined
                         }
                         onSelect={(date) => {
-                          field.onChange(
-                            date ? date.toLocaleDateString("es-CR") : ""
-                          );
+                          field.onChange(date);
                           setFormModified(true);
                         }}
                         initialFocus
