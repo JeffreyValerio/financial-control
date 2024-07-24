@@ -44,7 +44,12 @@ export default async function CategoriesPage() {
 
       <CardContent className="grid md:grid-cols-2 gap-8">
         <Table>
-          <TableCaption>Listado de gastos</TableCaption>
+          <TableCaption>
+            <div className="flex items-center justify-between font-bold">
+              <p>Total Egresos</p>
+              <p> {currencyFormat(Number(totalExpenses))}</p>
+            </div>
+          </TableCaption>
           <ScrollArea className="h-[500px] w-full rounded-md">
             <TableHeader>
               <TableRow className="text-xs">
@@ -77,8 +82,13 @@ export default async function CategoriesPage() {
         </Table>
 
         <Table>
-          <TableCaption>Listado de ingresos</TableCaption>
-          <ScrollArea className="h-[500px] w-full rounded-md">
+          <TableCaption>
+            <div className="flex items-center justify-between font-bold">
+              <p>Total Ingresos</p>
+              <p>{currencyFormat(Number(totalIncomes))}</p>
+            </div>
+          </TableCaption>
+          <ScrollArea className="w-full rounded-md">
             <TableHeader>
               <TableRow className="text-xs">
                 <TableHead>Nombre</TableHead>

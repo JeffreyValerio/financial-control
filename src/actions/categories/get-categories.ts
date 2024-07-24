@@ -1,9 +1,14 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { endOfMonth, startOfMonth } from "date-fns";
 
 export const GetCategories = async () => {
   try {
+    const now = new Date();
+    const startDate = startOfMonth(now);
+    const endDate = endOfMonth(now);
+
     const categories = await prisma.category.findMany({
       orderBy: {
         name: "asc",
@@ -12,6 +17,12 @@ export const GetCategories = async () => {
         Transaction: {
           orderBy: {
             date: "desc",
+          },
+          where: {
+            date: {
+              gte: startDate,
+              lte: endDate,
+            },
           },
         },
       },
