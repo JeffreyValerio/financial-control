@@ -31,6 +31,8 @@ export const metadata = {
 export default async function CategoriesPage() {
   const { categories, totalExpenses, totalIncomes } = await GetCategories();
 
+  if (!categories) return <> </>;
+
   return (
     <Card className="h-fit w-full">
       <CardHeader>

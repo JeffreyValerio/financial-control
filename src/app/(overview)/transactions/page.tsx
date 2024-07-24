@@ -42,7 +42,7 @@ const groupTransactionsByMonth = (
     const date: any =
       typeof transaction.date === "string"
         ? parseISO(transaction.date)
-        : transaction.date; 
+        : transaction.date;
     const monthYear = format(date, "MMMM yyyy");
 
     if (!acc[monthYear]) {
@@ -58,6 +58,8 @@ export default async function TransactionsPage() {
   const { transactions } = await GetTransactions();
   const groupedTransactions = groupTransactionsByMonth(transactions);
 
+  if (!transactions) return <></>;
+  
   return (
     <Card>
       <CardHeader className="grid grid-cols-2 items-center">
